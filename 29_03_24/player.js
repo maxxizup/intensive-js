@@ -67,20 +67,31 @@ function renderPlayListHeader(anyPlayListInfo) {
 }
 
 function renderTrackList(anyTracks) {
+
     const trackListElement = document.createElement("ul");
     for (let i = 0; i < anyTracks.length; i++) {
-        const trackElement = document.createElement("li");
-
-        const trackCoverElement = document.createElement("img")
-        trackCoverElement.src = anyTracks[i].trackCoverImgUrl;
-        trackCoverElement.style.width = "50px";
-        trackCoverElement.style.height = "50px";
-
-        trackElement.append(trackCoverElement);
-        trackElement.append(anyTracks[i].artistName + ": " + anyTracks[i].trackTitle)
+        const trackElement = createTrack(anyTracks[i]);
         trackListElement.append(trackElement);
     }
-        document.body.append(trackListElement);
+    document.body.append(trackListElement);
+}
+
+function createTrack(anyTrack) {
+    const trackElement = document.createElement("li");
+
+    const trackCoverElement = document.createElement("img");
+    trackCoverElement.src = anyTrack.trackCoverImgUrl;
+    trackCoverElement.style.width = "50px";
+    trackCoverElement.style.height = "50px";
+
+    const audio = document.createElement("audio");
+    audio.src = anyTrack.trackFileUrl;
+    audio.controls = true;
+
+    trackElement.append(trackCoverElement);
+    trackElement.append(anyTrack.artistName + ": " + anyTrack.trackTitle);
+    trackElement.append(audio);
+    return trackElement;
 }
 
 renderPlayList(playlist);
