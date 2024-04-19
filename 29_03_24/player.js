@@ -56,11 +56,11 @@ function renderPlayList(anyPlayList) {
 }
 function renderPlayListHeader(anyPlayListInfo) {
     const playListTitleElement = document.createElement("h1");
-    playListTitleElement.innerText = playlist.playListInfo.title;
+    playListTitleElement.innerText = anyPlayListInfo.title;
     document.body.append(playListTitleElement);
 
     const playListCoverElement = document.createElement("img");
-    playListCoverElement.src = playlist.playListInfo.coverImgUrl;
+    playListCoverElement.src = anyPlayListInfo.coverImgUrl;
     playListCoverElement.style.width = "150px";
     playListCoverElement.style.height = "150px";
     document.body.append(playListCoverElement);
