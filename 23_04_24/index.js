@@ -4,6 +4,7 @@ import {addEventListener, GAME_STATES, getGameState, start} from "./data.js";
 import {Settings} from "./components/Settings/settings.component.js";
 import {Win} from "./components/Win/win.component.js";
 import {Lose} from "./components/Lose/lose.component.js";
+import {Selectors} from "./components/Settings/Selectors/selectors.component.js";
 
 export function rerender () {
 	const rootElement = document.getElementById('root');
@@ -18,7 +19,7 @@ export function rerender () {
 			break;
 		}
 		case GAME_STATES.SETTINGS: {
-			rootElement.append(Settings());
+			rootElement.append(Selectors(), Settings());
 			break;
 		}
 		case GAME_STATES.WIN: {

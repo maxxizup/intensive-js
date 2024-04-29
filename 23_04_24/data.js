@@ -70,6 +70,18 @@ export function setGridSize(x, y) {
 	_data.settings.gridSize.y = y;
 }
 
+export function setPointsToWin(value) {
+	if (value < 1) throw new Error ('Incorrect win points value')
+
+	_data.settings.pointsToWin = value;
+}
+
+export function setPointsToLose(value) {
+	if (value < 1) throw new Error ('Incorrect lose points value')
+
+	_data.settings.pointsToLose = value;
+}
+
 export function start() {
 	_data.gameState = GAME_STATES.IN_PROGRESS;
 	runGoogleJump();
