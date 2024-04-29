@@ -2,6 +2,7 @@ import {start} from "../../data.js";
 
 export function Settings() {
 	const element = document.createElement('div');
+	element.className = 'button__box';
 
 	const startButton = document.createElement('button');
 	startButton.className = 'button start__button';
