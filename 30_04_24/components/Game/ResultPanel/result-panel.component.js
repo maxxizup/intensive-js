@@ -1,14 +1,28 @@
-import {getMissCount, getPointsCount} from "../../../data.js";
+import {getPointsCount} from "../../../data.js";
+import {Timer} from "./Timer/timer.component.js";
 
 export function ResultPanel() {
 	const element = document.createElement('div');
-	element.className = 'resultPanel';
+	element.classList.add('resultPanel');
 
-	const pointsCountPlayer1 = getPointsCount(1);
-	const pointsCountPlayer2 = getPointsCount(2);
-	const missCount = getMissCount();
+	const textP1Element = document.createElement('p');
+	const textP2Element = document.createElement('p');
 
-	element.innerHTML = `<p>PLAYER1: <span class="resultPanel__counters">${pointsCountPlayer1}</span><p>PLAYER2: <span class="resultPanel__counters">${pointsCountPlayer2}</span><p>Misses: <span class="resultPanel__counters">${missCount}</span></p>`;
+	const elementP1Points = document.createElement('span')
+	const elementP2Points = document.createElement('span')
+
+	elementP1Points.append(getPointsCount(1));
+	elementP2Points.append(getPointsCount(2));
+
+	const timerElement = Timer();
+
+	textP1Element.append('PLAYER1: ', elementP1Points);
+	textP2Element.append('PLAYER2: ', elementP2Points);
+
+	element.append(textP1Element, textP2Element, timerElement);
 
 	return element;
 }
+
+
+// АВТОМАТИЗИРОВАТЬ ❗❗❗❗❗❗❗❗

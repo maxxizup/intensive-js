@@ -7,7 +7,6 @@ export function rerender () {
 	rootElement.innerHTML = '';
 
 	rootElement.append(Game());
-
 }
 
 rerender();

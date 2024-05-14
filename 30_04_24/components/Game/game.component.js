@@ -5,7 +5,6 @@ import {Selectors} from "./Settings/Selectors/selectors.component.js";
 import {Settings} from "./Settings/settings.component.js";
 import {Win} from "./Win/win.component.js";
 import {Lose} from "./Lose/lose.component.js";
-import {InProgress} from "./InProgress/in-progress.component.js";
 
 window.addEventListener('keyup', (event) => {
 	switch (event.code) {
@@ -53,8 +52,7 @@ export function Game() {
 
 	switch (gameState) {
 		case GAME_STATES.IN_PROGRESS: {
-			// element.append(ResultPanel(), GameGrid());
-			element.append(InProgress());
+			element.append(ResultPanel(), GameGrid());
 			break;
 		}
 		case GAME_STATES.SETTINGS: {

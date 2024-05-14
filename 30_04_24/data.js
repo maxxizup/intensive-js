@@ -12,24 +12,28 @@ export const MOVING_DIRECTIONS = {
 	RIGHT: 'right',
 }
 
-
 const _data = {
-	gameState: GAME_STATES.IN_PROGRESS,
+	gameState: GAME_STATES.SETTINGS,
 	settings: {
 		gridSize: {
 			x: 4,
 			y: 4
 		},
-		pointsToWin: 5,
-		pointsToLose: 5,
-		googleJumpInterval: 1000
+		pointsToWin: 100,
+		pointsToLose: 100,
+		googleJumpInterval: 1000,
+		timeLimit: 5
+	},
+	time: {
+		format: '00:00',
+		passed: 0,
+		remaining: null,
 	},
 	pointsCount: {
 		player1: 0,
 		player2: 0
 	},
 	missCount: 0,
-	time: new Date (),
 	heroes: {
 		google: {
 			x: 0,
@@ -39,7 +43,6 @@ const _data = {
 		player2: {x:2, y: 2}
 	},
 }
-
 let _observer = () => {};
 
 function _changeGooglePos() {
@@ -62,6 +65,10 @@ function _changeGooglePos() {
 	_data.heroes.google.y = newY;
 }
 
+function _padZero(value) {
+	return value < 10 ? '0' + value : value;
+}
+
 function _getRandomInt(max) {
 	return Math.floor(Math.random() * (max + 1));
 }
@@ -71,15 +78,22 @@ function _stopGoogleJump() {
 }
 
 let jumpIntervalId;
+
 function _runGoogleJump() {
+
+
 	jumpIntervalId = setInterval(() => {
 		_changeGooglePos();
-		_data.missCount++;
-		if (_data.missCount === _data.settings.pointsToLose) {
+
+		// if (_data.missCount === _data.settings.pointsToLose) {  < ------- version 1
+		if (_data.time.remaining < 0 ) {
 			_stopGoogleJump();
-			_data.gameState = GAME_STATES.LOSE;
-			console.log(_data.gameState)
+			_stopTimer();
+			_data.gameState = GAME_STATES.WIN;
+			console.log('конец. прошло ' + _data.time.passed + 'с')
 		}
+
+		console.log('осталось' + _data.time.remaining);
 		_observer();
 	}, 1000)
 }
@@ -96,8 +110,25 @@ function catchGoogle(playerNumber) {
 		_changeGooglePos();
 		_runGoogleJump();
 	}
-
 	_observer();
+}
+
+let timerIntervalId;
+function _runTimer() {
+
+	timerIntervalId = setInterval(() => {
+
+		const minutes = Math.floor(_data.time.remaining / 60);
+		const seconds = _data.time.remaining % 60;
+		_data.time.format = _padZero(minutes) + ':' + _padZero(seconds);
+
+		--_data.time.remaining;
+		_data.time.passed++;
+	}, 1000);
+}
+
+function _stopTimer() {
+	clearInterval(timerIntervalId);
 }
 
 function _checkIsCoordsInValidRange (coords) {
@@ -134,6 +165,12 @@ export function setGridSize(x, y) {
 	_data.settings.gridSize.y = y;
 }
 
+export function setGameTime(seconds) {
+	if (seconds < 1) throw new Error('Incorrect time value');
+
+	_data.settings.time = seconds;
+}
+
 export function setPointsToWin(value) {
 	if (value < 1) throw new Error ('Incorrect win points value')
 
@@ -151,7 +188,11 @@ export function start() {
 		throw new Error ('Game cannot be started from state: ' + _data.gameState)
 	}
 
+	_data.time.format = `00:0${_data.settings.timeLimit}`; // ХУЙНЯ НА ПОСТНОМ МАСЛЕ ❗❗❗❗❗❗❗❗❗❗❗
 	_data.gameState = GAME_STATES.IN_PROGRESS;
+	_data.time.remaining = _data.settings.timeLimit - 1;
+
+	_runTimer();
 	_runGoogleJump();
 	_observer();
 	console.log(_data.gameState)
@@ -163,6 +204,7 @@ export function playAgain() {
 	_data.pointsCount.player1 = 0;
 	_data.pointsCount.player2 = 0;
 	_data.missCount = 0;
+	_data.time.passed = 0;
 
 	_data.heroes.player1.x = 1;
 	_data.heroes.player1.y = 1;
@@ -242,6 +284,10 @@ export function getGridSizeSettings () {
 	return {
 		..._data.settings.gridSize
 	}
+}
+
+export function getGameTimeSettings() {
+	return _data.time.format
 }
 
 export function getGameState() {
